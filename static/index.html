@@ -1,0 +1,692 @@
+<!-- <!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>CareCompanion</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    /* Reset & basic layout */
+    * { box-sizing: border-box; }
+    body, html {
+      margin:0; padding:0; height:100%;
+      font-family: 'Poppins', sans-serif;
+      background:
+        linear-gradient(135deg, rgba(34,193,195,0.3), rgba(253,187,45,0.3)),
+        url('https://images.unsplash.com/photo-1588776814546-6d89f91d29af?auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .chat-container {
+      width: 100%;
+      max-width: 900px;
+      height: 85vh;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(20px);
+      border-radius: 25px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+      display: flex;
+      overflow: hidden;
+      animation: fadeSlideUp 0.8s ease forwards;
+    }
+
+    /* Left avatar panel */
+    .avatar-section {
+      flex: 0 0 280px;
+      background: linear-gradient(135deg, #2a9d8f, #264653);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+      position: relative;
+    }
+    .avatar-section img {
+      width: 160px;
+      border-radius: 50%;
+      box-shadow: 0 0 25px rgba(255,255,255,0.4);
+      margin-bottom: 25px;
+      filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3));
+      object-fit: cover;
+      aspect-ratio: 1/1;
+    }
+    .avatar-section h2 {
+      font-weight: 700;
+      font-size: 1.8rem;
+      margin: 0 0 10px;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+    .avatar-section p {
+      font-weight: 400;
+      font-size: 1rem;
+      line-height: 1.4;
+      text-align: center;
+      opacity: 0.85;
+    }
+    .avatar-section button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 12px;
+      background: #ff8800;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .avatar-section button:hover { background: #e67600; }
+
+    /* Right chat area */
+    .chat-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+      border-top-right-radius: 25px;
+      border-bottom-right-radius: 25px;
+      box-shadow: inset 0 0 15px rgba(0,0,0,0.05);
+      position: relative;
+    }
+
+    header {
+      padding: 18px 30px;
+      font-weight: 700;
+      font-size: 1.5rem;
+      background: #2a9d8f;
+      color: white;
+      border-top-right-radius: 25px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+      letter-spacing: 1px;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    header .icon { font-size: 1.8rem; }
+    header #logout {
+      margin-left:auto;
+      background:#e63946; color:white;
+      border:none; padding:6px 12px;
+      border-radius:8px; cursor:pointer;
+    }
+
+    #chat {
+      flex: 1;
+      padding: 25px 30px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      scroll-behavior: smooth;
+      background: linear-gradient(to bottom, #f9fafa, #ffffff);
+    }
+    .message {
+      max-width: 70%;
+      padding: 14px 20px;
+      border-radius: 22px;
+      font-size: 1rem;
+      line-height: 1.5;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.07);
+      animation: fadeIn 0.3s ease forwards;
+      position: relative;
+      word-wrap: break-word;
+      white-space: pre-wrap;
+      user-select: text;
+    }
+    .message.user {
+      align-self: flex-end;
+      background: linear-gradient(145deg, #1976d2, #1565c0);
+      color: white;
+      border-bottom-right-radius: 6px;
+      box-shadow: 0 4px 15px rgba(25, 118, 210, 0.45);
+      letter-spacing: 0.02em;
+      font-weight: 500;
+      transition: background 0.3s ease;
+    }
+    .message.bot {
+      align-self: flex-start;
+      background: #e0f7fa;
+      color: #004d40;
+      border-bottom-left-radius: 6px;
+      box-shadow: 0 4px 15px rgba(0, 102, 96, 0.15);
+      font-weight: 400;
+    }
+
+    .meta {
+      font-size: 0.9rem;
+      color: #444;
+      text-align: center;
+      margin-top: 8px;
+      user-select: none;
+    }
+    .triage-badge {
+      padding: 6px 14px;
+      border-radius: 15px;
+      font-weight: 600;
+      display: inline-block;
+      margin-top: 6px;
+      letter-spacing: 0.05em;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      transition: background 0.3s ease;
+      user-select: none;
+    }
+    .triage-emergency { background: #e63946; color: white; }
+    .triage-urgent { background: #ff8800; color: white; }
+    .triage-normal { background: #2a9d8f; color: white; }
+
+    #input-area {
+      display: flex;
+      padding: 14px 30px;
+      background: #fafafa;
+      border-top: 1px solid #ddd;
+      align-items: center;
+      gap: 12px;
+      border-bottom-right-radius: 25px;
+    }
+    #input {
+      flex: 1;
+      padding: 14px 18px;
+      border-radius: 20px;
+      border: 1.8px solid #ccc;
+      font-size: 1rem;
+      outline: none;
+      transition: all 0.3s ease;
+      font-weight: 400;
+      letter-spacing: 0.03em;
+      box-shadow: inset 1px 1px 3px rgba(0,0,0,0.05);
+    }
+    #send {
+      background: #2a9d8f;
+      border: none;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 15px rgba(42,157,143,0.4);
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    #send:hover { background: #21867a; transform: scale(1.08); }
+    #send svg { fill: white; width: 22px; height: 22px; }
+
+    #typing {
+      display: none;
+      padding: 0 30px 8px;
+      font-style: italic;
+      font-size: 0.9rem;
+      color: #666;
+      user-select: none;
+      height: 24px;
+    }
+    .typing-dots span {
+      display: inline-block;
+      animation: bounce 1.2s infinite;
+      font-size: 1.8rem;
+      line-height: 0;
+      margin-right: 4px;
+      color: #2a9d8f;
+    }
+    .typing-dots span:nth-child(2) { animation-delay: 0.15s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(0.7); opacity: 0.5; }
+      40% { transform: scale(1.2); opacity: 1; }
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    #chat::-webkit-scrollbar { width: 8px; }
+    #chat::-webkit-scrollbar-thumb { background: #2a9d8f; border-radius: 10px; }
+    #chat::-webkit-scrollbar-track { background: transparent; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .chat-container { max-width: 100%; height: 95vh; border-radius: 15px; flex-direction: column; }
+      .avatar-section { flex: none; height: 160px; padding: 20px; flex-direction: row; justify-content: flex-start; gap: 20px; border-radius: 15px 15px 0 0; }
+      .avatar-section img { width: 110px; margin-bottom: 0; }
+      .avatar-section h2 { font-size: 1.3rem; margin-top: 12px; }
+      .avatar-section p { font-size: 0.9rem; }
+      .chat-section { border-radius: 0 0 15px 15px; }
+      header { font-size: 1.2rem; border-radius: 0; }
+      #input-area { border-radius: 0 0 15px 15px; padding: 10px 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container" role="main" aria-label="Virtual Doctor Chat">
+    <div class="avatar-section" aria-label="Doctor Profile">
+      <img src="static\WhatsApp Image 2025-08-13 at 10.23.36_1ca273f5.jpg" alt="Doctor avatar" />
+      <h2>Dr.Cura</h2>
+      <p>Your trusted virtual healthcare assistant.<br/>Ask me anything about your symptoms.</p>
+      <button id="run-simulator">Run Simulator</button>
+    </div>
+    <div class="chat-section" aria-live="polite">
+      <header><span class="icon">🩺</span> Care Companion
+        <button id="logout">Logout</button>
+      </header>
+      <div id="chat" role="log" aria-live="polite" aria-atomic="false"></div>
+      <div id="typing" aria-label="Typing indicator">
+        <div class="typing-dots"><span>•</span><span>•</span><span>•</span></div>
+      </div>
+      <div id="input-area">
+        <input id="input" type="text" placeholder="Describe your symptoms..." aria-label="Message input" autocomplete="off" />
+        <button id="send" aria-label="Send message" title="Send">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem("token");
+    if (!token) window.location.href = "login.html";
+
+    const sessionId = 'sess-' + Math.random().toString(36).slice(2,9);
+    const chat = document.getElementById('chat');
+    const typingIndicator = document.getElementById('typing');
+
+    function appendMessage(text, cls='meta') {
+      const d = document.createElement('div');
+      d.className = 'message ' + cls;
+      d.innerHTML = text;
+      chat.appendChild(d);
+      chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' });
+    }
+
+    function appendMeta(html) {
+      const d = document.createElement('div');
+      d.className = 'meta';
+      d.innerHTML = html;
+      chat.appendChild(d);
+      chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' });
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById('input');
+      const msg = input.value.trim();
+      if(!msg) return;
+      appendMessage(msg, 'user');
+      input.value = '';
+      typingIndicator.style.display = 'block';
+
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type':'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({session_id: sessionId, message: msg})
+        });
+        const data = await res.json();
+        appendMessage(data.reply, 'bot');
+
+        let triageClass = 'triage-normal';
+        if (data.triage.level === 'Emergency') triageClass = 'triage-emergency';
+        else if (data.triage.level === 'Urgent') triageClass = 'triage-urgent';
+        appendMeta(`<span class="triage-badge ${triageClass}">${data.triage.level} — ${data.triage.reason}</span>`);
+      } catch (err) {
+        appendMessage("Sorry, something went wrong. Please try again later.", 'bot');
+      } finally { typingIndicator.style.display = 'none'; }
+    }
+
+    async function runSimulator() {
+      appendMeta("<em>Starting patient simulation...</em>");
+      typingIndicator.style.display = 'block';
+      try {
+        const res = await fetch('/api/simulate_patient_chat', {
+          method: 'GET',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+
+        for (const msg of data.message_history) {
+          appendMessage(msg.content, msg.role === 'user' ? 'user' : 'bot');
+        }
+
+        let triageClass = 'triage-normal';
+        if (data.triage.level === 'Emergency') triageClass = 'triage-emergency';
+        else if (data.triage.level === 'Urgent') triageClass = 'triage-urgent';
+        appendMeta(`<span class="triage-badge ${triageClass}">${data.triage.level} — ${data.triage.reason}</span>`);
+
+        appendMessage(`<strong>Doctor reply:</strong> ${data.doctor_reply}`, 'bot');
+      } catch (err) {
+        appendMessage("Simulation failed. Try again.", 'bot');
+      } finally { typingIndicator.style.display = 'none'; }
+    }
+
+    document.getElementById('send').onclick = sendMessage;
+    document.getElementById('input').addEventListener('keypress', e => { if (e.key === 'Enter') sendMessage(); });
+    document.getElementById('run-simulator').onclick = runSimulator;
+    document.getElementById('logout').onclick = () => { localStorage.removeItem('token'); window.location.href = '/'; };
+  </script>
+</body>
+</html> -->
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>CareCompanion</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; }
+    body, html {
+      margin:0; padding:0; height:100%;
+      font-family: 'Poppins', sans-serif;
+      background:
+        linear-gradient(135deg, rgba(34,193,195,0.3), rgba(253,187,45,0.3)),
+        url('https://images.unsplash.com/photo-1588776814546-6d89f91d29af?auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;
+      background-size: cover;
+      display: flex; justify-content: center; align-items: center;
+    }
+
+    .chat-container {
+      width: 100%; max-width: 900px; height: 85vh;
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(18px);
+      border-radius: 25px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+      display: flex; overflow: hidden;
+      animation: fadeSlideUp 0.8s ease forwards;
+    }
+
+    /* Left doctor avatar section */
+    .avatar-section {
+      flex: 0 0 280px;
+      background: linear-gradient(135deg, #2a9d8f, #264653);
+      color: white;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      padding: 40px 20px;
+    }
+    .avatar-section img {
+      width: 150px; border-radius: 50%; margin-bottom: 20px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.4);
+      object-fit: cover;
+    }
+    .avatar-section h2 { margin: 0; font-weight: 700; font-size: 1.6rem; }
+    .avatar-section p { text-align: center; font-size: 1rem; margin-top: 8px; }
+    .avatar-section button {
+      margin-top: 12px; padding: 10px 20px;
+      border: none; border-radius: 12px;
+      background: #ff8800; color: white;
+      font-weight: 600; cursor: pointer;
+      transition: background 0.3s ease;
+      width: 180px;
+    }
+    .avatar-section button:hover { background: #e67600; }
+    #generate-summary { background: #0077cc !important; }
+    #generate-diagnosis { background: #ff8800 !important; }
+
+    /* Chat section */
+    .chat-section {
+      flex: 1; display: flex; flex-direction: column;
+      background: #fff; border-top-right-radius: 25px; border-bottom-right-radius: 25px;
+    }
+    header {
+      padding: 18px 30px;
+      font-weight: 700; font-size: 1.5rem;
+      background: #2a9d8f; color: white;
+      display: flex; align-items: center;
+    }
+    header #logout {
+      margin-left:auto; background:#e63946;
+      color:white; border:none;
+      padding:6px 12px; border-radius:8px; cursor:pointer;
+    }
+
+    #chat {
+      flex: 1; padding: 25px 30px; overflow-y: auto;
+      display: flex; flex-direction: column; gap: 16px;
+      background: linear-gradient(to bottom, #f9fafa, #ffffff);
+    }
+    .message {
+      max-width: 75%; padding: 14px 20px;
+      border-radius: 22px; font-size: 1rem; line-height: 1.5;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.07);
+      animation: fadeIn 0.3s ease forwards;
+    }
+    .message.user {
+      align-self: flex-end; background: #1976d2; color: white;
+      border-bottom-right-radius: 6px;
+    }
+    .message.bot {
+      align-self: flex-start; background: #e0f7fa; color: #004d40;
+      border-bottom-left-radius: 6px;
+    }
+
+    .triage-badge {
+      display: inline-block;
+      padding: 10px 16px;
+      border-radius: 16px;
+      font-weight: 600;
+      color: white;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      align-self: flex-start;
+    }
+
+    .meta { font-size: 0.9rem; text-align:center; color:#444; }
+
+    #input-area {
+      display: flex; padding: 14px 30px;
+      border-top: 1px solid #ddd; align-items:center; gap: 12px;
+      background: #fafafa;
+    }
+    #input {
+      flex: 1; padding: 14px 18px; border-radius: 20px;
+      border: 1.8px solid #ccc; font-size: 1rem;
+    }
+    #send {
+      background: #2a9d8f; border: none; border-radius: 50%;
+      width: 44px; height: 44px; cursor: pointer;
+      color: white; font-weight: bold;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed; bottom: 30px; left: 50%;
+      transform: translateX(-50%);
+      background: #2a9d8f; color: white;
+      padding: 14px 20px; border-radius: 20px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+      opacity: 0; pointer-events: none;
+      transition: all 0.4s ease;
+      font-weight: 500;
+    }
+    .toast.show { opacity: 1; pointer-events: auto; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    #chat::-webkit-scrollbar { width: 8px; }
+    #chat::-webkit-scrollbar-thumb { background: #2a9d8f; border-radius: 10px; }
+  </style>
+</head>
+
+<body>
+  <div class="chat-container">
+    <div class="avatar-section">
+      <img src="static/doctor image.jpg" alt="Doctor avatar" />
+      <h2>Dr. Cura</h2>
+      <p>Your trusted AI healthcare assistant.</p>
+      <button id="run-simulator">Run Simulator</button>
+      <button id="generate-summary">Generate Summary</button>
+      <button id="generate-diagnosis">Generate Diagnosis</button>
+    </div>
+
+    <div class="chat-section">
+      <header>🩺 Care Companion <button id="logout">Logout</button></header>
+      <div id="chat"></div>
+      <div id="input-area">
+        <input id="input" type="text" placeholder="Describe your symptoms..." />
+        <button id="send">➤</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast">Summary generated successfully!</div>
+
+  <script>
+    window.onload = () => {
+      const token = localStorage.getItem("token");
+      if (!token) window.location.href = "login.html";
+
+      const chat = document.getElementById('chat');
+      const sessionId = 'sess-' + Math.random().toString(36).slice(2,9);
+      const toast = document.getElementById('toast');
+
+      function appendMessage(text, cls='meta') {
+        const d = document.createElement('div');
+        d.className = 'message ' + cls;
+        d.innerHTML = text;
+        chat.appendChild(d);
+        chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' });
+      }
+
+      function appendTriage(triage) {
+        if (!triage || !triage.status) return;
+        const badge = document.createElement('div');
+        badge.className = 'triage-badge';
+        badge.style.background = triage.color || '#2a9d8f';
+        badge.innerHTML = `${triage.status}<br><small>${triage.reason}</small>`;
+        chat.appendChild(badge);
+        chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' });
+      }
+
+      function showToast(msg) {
+        toast.textContent = msg;
+        toast.classList.add('show');
+        setTimeout(()=> toast.classList.remove('show'), 4000);
+      }
+
+      async function sendMessage() {
+        const input = document.getElementById('input');
+        const msg = input.value.trim();
+        if (!msg) return;
+        appendMessage(msg, 'user');
+        input.value = '';
+
+        try {
+          const res = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type':'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify({session_id: sessionId, message: msg})
+          });
+          const data = await res.json();
+          appendMessage(data.reply, 'bot');
+          appendTriage(data.triage);
+        } catch (err) {
+          appendMessage("❌ Something went wrong.", 'bot');
+        }
+      }
+
+      async function runSimulator() {
+        appendMessage("<em>Starting patient simulation...</em>", 'meta');
+        try {
+          const res = await fetch('/api/simulate_patient_chat', {
+            method: 'GET',
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          const data = await res.json();
+          appendMessage(`🧍 <strong>Patient:</strong> ${data.patient_name}`, 'meta');
+          data.message_history.forEach(m => appendMessage(m.message, m.role === 'patient' ? 'user' : 'bot'));
+          appendMessage(`<strong>Doctor:</strong> ${data.doctor_reply}`, 'bot');
+        } catch (err) {
+          appendMessage("❌ Simulation failed. Try again.", 'bot');
+        }
+      }
+
+      async function generateSummary() {
+        appendMessage("<em>Generating summary...</em>", 'meta');
+        try {
+          const res = await fetch('/api/generate_summary', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          const data = await res.json();
+          appendMessage(`<strong>🧾 Summary:</strong><br>${data.summary}`, 'bot');
+          showToast("✅ Summary generated successfully!");
+        } catch (err) {
+          appendMessage("❌ Failed to generate summary.", 'bot');
+        }
+      }
+
+      async function generateDiagnosis() {
+        appendMessage("<em>Analyzing conversation for possible diagnoses...</em>", 'meta');
+        try {
+          const res = await fetch('/api/generate_diagnosis', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+
+          if (res.status === 401) {
+            appendMessage("⚠️ Session expired. Please log in again.", 'bot');
+            localStorage.removeItem("token");
+            setTimeout(() => window.location.href = "login.html", 1500);
+            return;
+          }
+
+          const data = await res.json();
+          if (!data.diagnosis || data.diagnosis.includes("⚠️")) {
+            appendMessage("⚠️ Please chat first before generating diagnosis.", 'bot');
+            return;
+          }
+
+          // 🩺 Format diagnosis output attractively
+          let formattedDiagnosis = data.diagnosis
+            .replace(/\d+\.\s*/g, '\n• ')
+            .split('\n')
+            .filter(line => line.trim() !== '')
+            .map(line => {
+              const parts = line.split(' - ');
+              const title = parts[0]?.trim() || '';
+              const desc = parts[1]?.trim() || '';
+              return `<div style="margin-bottom:8px;">
+                <span style="color:#00695c; font-weight:700;">${title}</span>
+                <span style="color:#004d40;"> — ${desc}</span>
+              </div>`;
+            })
+            .join('');
+
+          appendMessage(
+            `<div style="
+              background:#e0f7fa;
+              color:#004d40;
+              padding:16px 20px;
+              border-radius:20px;
+              box-shadow:0 4px 8px rgba(0,0,0,0.1);
+              line-height:1.6;
+              ">
+              <strong style="font-size:1.1rem;">🩻 Top 5 Possible Diagnoses:</strong><br>${formattedDiagnosis}
+            </div>`,
+            'bot'
+          );
+          showToast("✅ Diagnosis generated successfully!");
+        } catch (err) {
+          appendMessage("❌ Failed to generate diagnosis.", 'bot');
+        }
+      }
+
+      document.getElementById('send').onclick = sendMessage;
+      document.getElementById('input').addEventListener('keypress', e => { if (e.key === 'Enter') sendMessage(); });
+      document.getElementById('run-simulator').onclick = runSimulator;
+      document.getElementById('generate-summary').onclick = generateSummary;
+      document.getElementById('generate-diagnosis').onclick = generateDiagnosis;
+      document.getElementById('logout').onclick = () => { localStorage.removeItem('token'); window.location.href = '/'; };
+    };
+  </script>
+</body>
+</html>

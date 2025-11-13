@@ -1,0 +1,5 @@
+{
+  "appendicitis": {"recommended_triage": "Emergency", "note":"Consider urgent surgical assessment for right lower quadrant pain with peritonism."},
+  "pneumonia": {"recommended_triage": "Urgent", "note":"If high fever and tachypnea or hypoxia, seek urgent care."},
+  "urinary tract infection": {"recommended_triage": "Routine", "note": "Most uncomplicated UTIs are outpatient"}
+}

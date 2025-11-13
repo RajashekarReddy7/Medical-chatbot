@@ -1,0 +1,202 @@
+[
+  {
+    "patient_id": "P001",
+    "name": "John Doe",
+    "age": 45,
+    "gender": "Male",
+    "chief_complaint": "Severe headache and nausea",
+    "history": "Patient reports sudden severe headache, nausea, and slight dizziness for 3 hours.",
+    "vitals": { "bp": "140/90", "hr": 88, "temp": 98.6 },
+    "symptoms": ["headache", "nausea", "dizziness"]
+  },
+  {
+    "patient_id": "P002",
+    "name": "Jane Smith",
+    "age": 30,
+    "gender": "Female",
+    "chief_complaint": "Fever and cough",
+    "history": "Patient reports 2-day history of fever, mild cough, and body ache.",
+    "vitals": { "bp": "120/80", "hr": 92, "temp": 101.4 },
+    "symptoms": ["fever", "cough", "body ache"]
+  },
+  {
+    "patient_id": "P003",
+    "name": "Michael Brown",
+    "age": 62,
+    "gender": "Male",
+    "chief_complaint": "Chest pain and shortness of breath",
+    "history": "Sudden onset chest pain radiating to left arm, shortness of breath for 20 minutes.",
+    "vitals": { "bp": "160/100", "hr": 110, "temp": 98.7 },
+    "symptoms": ["chest pain", "shortness of breath"]
+  },
+  {
+    "patient_id": "P004",
+    "name": "Emily Davis",
+    "age": 25,
+    "gender": "Female",
+    "chief_complaint": "Sore throat and mild fever",
+    "history": "Complains of throat irritation and low-grade fever since yesterday.",
+    "vitals": { "bp": "115/75", "hr": 84, "temp": 99.5 },
+    "symptoms": ["sore throat", "fever"]
+  },
+  {
+    "patient_id": "P005",
+    "name": "Robert Wilson",
+    "age": 50,
+    "gender": "Male",
+    "chief_complaint": "Persistent cough and fatigue",
+    "history": "Cough for 3 weeks, worse at night. Mild fatigue, non-smoker.",
+    "vitals": { "bp": "125/85", "hr": 82, "temp": 98.9 },
+    "symptoms": ["cough", "fatigue"]
+  },
+  {
+    "patient_id": "P006",
+    "name": "Laura Johnson",
+    "age": 35,
+    "gender": "Female",
+    "chief_complaint": "Abdominal pain and bloating",
+    "history": "Reports lower abdominal pain, bloating, and mild constipation for 2 days.",
+    "vitals": { "bp": "118/80", "hr": 78, "temp": 98.2 },
+    "symptoms": ["abdominal pain", "bloating", "constipation"]
+  },
+  {
+    "patient_id": "P007",
+    "name": "David Miller",
+    "age": 55,
+    "gender": "Male",
+    "chief_complaint": "Back pain and stiffness",
+    "history": "Complains of lower back pain after lifting heavy object. Pain worsens on bending.",
+    "vitals": { "bp": "130/85", "hr": 86, "temp": 98.4 },
+    "symptoms": ["back pain", "stiffness"]
+  },
+  {
+    "patient_id": "P008",
+    "name": "Sarah Lee",
+    "age": 29,
+    "gender": "Female",
+    "chief_complaint": "Anxiety and palpitations",
+    "history": "Patient reports anxiety episodes, palpitations, and sweating, worsened by stress.",
+    "vitals": { "bp": "125/80", "hr": 102, "temp": 98.5 },
+    "symptoms": ["anxiety", "palpitations", "sweating"]
+  },
+  {
+    "patient_id": "P009",
+    "name": "Thomas White",
+    "age": 40,
+    "gender": "Male",
+    "chief_complaint": "Diarrhea and abdominal cramps",
+    "history": "Loose stools and abdominal cramps since morning after eating street food.",
+    "vitals": { "bp": "118/76", "hr": 90, "temp": 99.2 },
+    "symptoms": ["diarrhea", "abdominal cramps"]
+  },
+  {
+    "patient_id": "P010",
+    "name": "Olivia Martin",
+    "age": 23,
+    "gender": "Female",
+    "chief_complaint": "Skin rash and itching",
+    "history": "Rash on arms and legs after using new detergent. No fever.",
+    "vitals": { "bp": "112/70", "hr": 80, "temp": 98.3 },
+    "symptoms": ["rash", "itching"]
+  },
+  {
+    "patient_id": "P011",
+    "name": "Henry Taylor",
+    "age": 65,
+    "gender": "Male",
+    "chief_complaint": "Shortness of breath and swelling in legs",
+    "history": "Gradual breathlessness on exertion, ankle swelling for 1 week.",
+    "vitals": { "bp": "145/95", "hr": 98, "temp": 98.6 },
+    "symptoms": ["shortness of breath", "leg swelling"]
+  },
+  {
+    "patient_id": "P012",
+    "name": "Sophia Anderson",
+    "age": 34,
+    "gender": "Female",
+    "chief_complaint": "Headache and blurred vision",
+    "history": "Patient reports headaches and occasional blurred vision for 2 days.",
+    "vitals": { "bp": "135/90", "hr": 88, "temp": 98.4 },
+    "symptoms": ["headache", "blurred vision"]
+  },
+  {
+    "patient_id": "P013",
+    "name": "Daniel Thomas",
+    "age": 70,
+    "gender": "Male",
+    "chief_complaint": "Joint pain and swelling",
+    "history": "Reports painful, swollen knee joints. Difficulty walking.",
+    "vitals": { "bp": "130/85", "hr": 90, "temp": 98.5 },
+    "symptoms": ["joint pain", "swelling"]
+  },
+  {
+    "patient_id": "P014",
+    "name": "Isabella Garcia",
+    "age": 28,
+    "gender": "Female",
+    "chief_complaint": "Fatigue and dizziness",
+    "history": "Feels tired and dizzy, especially on standing. Heavy periods noted.",
+    "vitals": { "bp": "110/70", "hr": 88, "temp": 98.1 },
+    "symptoms": ["fatigue", "dizziness"]
+  },
+  {
+    "patient_id": "P015",
+    "name": "James Martinez",
+    "age": 50,
+    "gender": "Male",
+    "chief_complaint": "Frequent urination and thirst",
+    "history": "Reports increased urination, thirst, and fatigue for 1 week.",
+    "vitals": { "bp": "138/88", "hr": 85, "temp": 98.7 },
+    "symptoms": ["frequent urination", "thirst", "fatigue"]
+  },
+  {
+    "patient_id": "P016",
+    "name": "Emma Robinson",
+    "age": 26,
+    "gender": "Female",
+    "chief_complaint": "Menstrual cramps",
+    "history": "Severe cramps during periods for past 2 days, relieved partially by painkillers.",
+    "vitals": { "bp": "115/75", "hr": 82, "temp": 98.6 },
+    "symptoms": ["abdominal pain", "cramps"]
+  },
+  {
+    "patient_id": "P017",
+    "name": "Noah Clark",
+    "age": 45,
+    "gender": "Male",
+    "chief_complaint": "Heartburn and acid reflux",
+    "history": "Burning sensation in chest after meals, occasional sour taste in mouth.",
+    "vitals": { "bp": "120/80", "hr": 78, "temp": 98.2 },
+    "symptoms": ["heartburn", "acid reflux"]
+  },
+  {
+    "patient_id": "P018",
+    "name": "Ava Rodriguez",
+    "age": 38,
+    "gender": "Female",
+    "chief_complaint": "Migraine and light sensitivity",
+    "history": "Recurring headaches with nausea and light sensitivity, lasting 4 hours.",
+    "vitals": { "bp": "125/80", "hr": 84, "temp": 98.3 },
+    "symptoms": ["migraine", "light sensitivity", "nausea"]
+  },
+  {
+    "patient_id": "P019",
+    "name": "William Lewis",
+    "age": 60,
+    "gender": "Male",
+    "chief_complaint": "Leg pain and cramping",
+    "history": "Pain in calves while walking, relieved by rest.",
+    "vitals": { "bp": "140/90", "hr": 80, "temp": 98.5 },
+    "symptoms": ["leg pain", "cramping"]
+  },
+  {
+    "patient_id": "P020",
+    "name": "Charlotte Walker",
+    "age": 33,
+    "gender": "Female",
+    "chief_complaint": "Sinus pressure and nasal congestion",
+    "history": "Blocked nose and pressure over forehead for 3 days.",
+    "vitals": { "bp": "118/76", "hr": 78, "temp": 99.1 },
+    "symptoms": ["sinus pressure", "nasal congestion"]
+  }
+]

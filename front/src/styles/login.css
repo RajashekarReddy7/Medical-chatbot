@@ -1,0 +1,259 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%; /* Must be 100% to fill the viewport */
+  width: 100%;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background: #f0f2f5; 
+  display: block; /* Remove flex on body to allow auth-wrapper to take full space */
+  overflow: hidden; /* Prevent body scroll bars */
+}
+
+/* =====================
+   Split Screen Layout - FULL SCREEN FIX HERE
+===================== */
+.auth-wrapper {
+  display: flex;
+  width: 100vw; /* Take full viewport width */
+  height: 100vh; /* Take full viewport height */
+  margin: 0;
+  padding: 0;
+}
+
+/* Left Section - Image */
+.auth-left {
+  flex: 1; /* Takes up 50% of the width */
+  background: #007bff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; 
+  /* Setting width/height to 100% here guarantees it fills its half of the screen */
+  width: 50%; 
+  height: 100%; 
+}
+
+.auth-left .login-image {
+  max-width: 80%; 
+  max-height: 80%;
+  object-fit: contain; 
+  border-radius: 15px; 
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); 
+}
+
+/* Right Section - Login Card */
+.auth-right {
+  flex: 1; /* Takes up 50% of the width */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f0f2f5; 
+  padding: 20px;
+  width: 50%;
+  height: 100%;
+}
+
+/* =====================
+   Login Card Styling
+===================== */
+.login-card {
+  width: 100%;
+  max-width: 450px; 
+  padding: 50px 40px;
+  background: white;
+  border-radius: 15px; 
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1); 
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.login-header {
+  margin-bottom: 30px;
+}
+
+.carebot-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 25px;
+  gap: 8px; 
+}
+
+.carebot-logo .heart-icon {
+  color: #007bff; 
+  width: 30px;
+  height: 30px;
+}
+
+.carebot-logo span {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #333; 
+}
+
+.login-header h2 {
+  color: #333; 
+  font-weight: 700;
+  font-size: 2rem;
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  color: #666; 
+  font-size: 1rem;
+}
+
+/* =====================
+   Input Fields
+===================== */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.input-group {
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #a0a0a0; 
+  width: 20px;
+  height: 20px;
+}
+
+.eye-toggle {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #a0a0a0;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 5px;
+  transition: color 0.2s ease;
+}
+
+.eye-toggle:hover {
+  color: #007bff;
+}
+
+input {
+  width: 100%;
+  padding: 14px 45px;
+  border: 1px solid #e0e0e0; 
+  border-radius: 8px; 
+  background: #fdfdfd; 
+  font-size: 1rem;
+  color: #333;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+  background: white;
+}
+
+input::placeholder {
+  color: #a0a0a0;
+}
+
+/* =====================
+   Button
+===================== */
+button {
+  background: #007bff;
+  border: none;
+  padding: 14px;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  font-size: 1.05rem;
+  cursor: pointer;
+  margin-top: 25px;
+  box-shadow: 0 5px 20px rgba(0, 123, 255, 0.2); 
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 123, 255, 0.3);
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(0, 123, 255, 0.1);
+}
+
+/* =====================
+   Switch Text
+===================== */
+.toggle {
+  margin-top: 30px;
+  font-size: 0.95rem;
+  color: #666;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.toggle span {
+    color: #007bff;
+    font-weight: 600;
+}
+
+.toggle:hover span {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+/* =====================
+   Responsive Adjustments
+===================== */
+@media (max-width: 768px) {
+  .auth-wrapper {
+    flex-direction: column; 
+    height: auto; 
+    overflow-y: auto;
+  }
+
+  .auth-left {
+    display: none; 
+  }
+
+  .auth-right {
+    flex: none; 
+    width: 100%;
+    min-height: 100vh; 
+    padding: 20px;
+  }
+
+  .login-card {
+    border-radius: 0; 
+    box-shadow: none; 
+    padding: 30px 20px;
+    max-width: 100%; 
+  }
+
+  .login-header h2 {
+    font-size: 1.8rem;
+  }
+}

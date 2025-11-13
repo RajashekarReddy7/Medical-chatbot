@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Login - AI CareBot</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #0a192f, #1f4068, #16213e);
+      background-size: cover;
+      background-position: center;
+      color: white;
+      overflow: hidden;
+    }
+
+    /* Subtle glowing abstract background */
+    body::before {
+      content: "";
+      position: absolute;
+      top: -100px;
+      left: -100px;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(0,255,163,0.4), transparent 70%);
+      filter: blur(120px);
+      animation: float 6s infinite alternate;
+    }
+    body::after {
+      content: "";
+      position: absolute;
+      bottom: -120px;
+      right: -100px;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(0,180,255,0.3), transparent 70%);
+      filter: blur(140px);
+      animation: float 8s infinite alternate-reverse;
+    }
+
+    @keyframes float {
+      from { transform: translateY(0); }
+      to { transform: translateY(30px); }
+    }
+
+    .container {
+      display: flex;
+      width: 90%;
+      max-width: 1200px;
+      z-index: 2;
+    }
+
+    /* Left description section */
+    .info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 40px;
+      color: #e0f7fa;
+    }
+
+    .info h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      background: linear-gradient(90deg, #00e5ff, #00ff9d);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .info p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: #cfd8dc;
+    }
+
+    /* Glassmorphism login box */
+    .login-box {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+
+    .logo {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 20px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .login-box h2 {
+      margin-bottom: 20px;
+      color: #00e5ff;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 10px;
+      outline: none;
+      font-size: 1rem;
+    }
+
+    input::placeholder { color: #888; }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(90deg, #00e5ff, #00ff9d);
+      border: none;
+      border-radius: 10px;
+      color: #0a192f;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 12px #00e5ff;
+    }
+
+    .toggle {
+      margin-top: 15px;
+      cursor: pointer;
+      color: #80deea;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Left side info -->
+    <div class="info">
+      <h1>Welcome to AI CareBot</h1>
+      <p>Your AI-powered healthcare assistant providing reliable, 24/7 support for health queries.</p>
+    </div>
+
+    <!-- Right side login box -->
+    <div class="login-box">
+      <div class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="70" height="70">
+          <!-- Outer futuristic circle -->
+          <circle cx="40" cy="40" r="35" stroke="url(#grad1)" stroke-width="3" fill="none" />
+          
+          <!-- Medical cross -->
+          <rect x="35" y="22" width="10" height="36" rx="2" fill="url(#grad2)" />
+          <rect x="22" y="35" width="36" height="10" rx="2" fill="url(#grad2)" />
+
+          <!-- AI circuit dots -->
+          <circle cx="40" cy="8" r="4" fill="url(#grad3)" />
+          <circle cx="72" cy="40" r="4" fill="url(#grad3)" />
+          <circle cx="40" cy="72" r="4" fill="url(#grad3)" />
+          <circle cx="8" cy="40" r="4" fill="url(#grad3)" />
+
+          <!-- Gradients -->
+          <defs>
+            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#00e5ff;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#00ff9d;stop-opacity:1" />
+            </linearGradient>
+            <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#00e5ff;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#00ff9d;stop-opacity:1" />
+            </linearGradient>
+            <radialGradient id="grad3" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" style="stop-color:#00ff9d;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#00e5ff;stop-opacity:0.6" />
+            </radialGradient>
+          </defs>
+        </svg>
+      </div>
+      <h2 id="form-title">Login</h2>
+      <input type="email" id="email" placeholder="Email" />
+      <input type="password" id="password" placeholder="Password" />
+      <button onclick="submitForm()">Login</button>
+      <div class="toggle" onclick="toggleForm()">Don’t have an account? Register</div>
+    </div>
+  </div>
+
+  <script>
+    let isLogin = true;
+
+    function toggleForm() {
+      isLogin = !isLogin;
+      document.getElementById("form-title").innerText = isLogin ? "Login" : "Register";
+      document.querySelector("button").innerText = isLogin ? "Login" : "Register";
+      document.querySelector(".toggle").innerText = isLogin ? "Don’t have an account? Register" : "Already have an account? Login";
+    }
+
+    async function submitForm() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      if (!email || !password) { alert("Please fill all fields"); return; }
+
+      try {
+        if (isLogin) {
+          const formData = new URLSearchParams();
+          formData.append("username", email);
+          formData.append("password", password);
+
+          const res = await fetch("/login", {
+            method: "POST",
+            headers: {"Content-Type": "application/x-www-form-urlencoded"},
+            body: formData
+          });
+          const data = await res.json();
+          if (data.access_token) {
+            localStorage.setItem("token", data.access_token);
+            window.location.href = "/chat";
+          } else {
+            alert("Login failed");
+          }
+        } else {
+          const res = await fetch("/register", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ email, password })
+          });
+          if (res.ok) {
+            alert("Registered successfully, now login.");
+            toggleForm();
+          } else {
+            const err = await res.json();
+            alert(err.detail);
+          }
+        }
+      } catch (e) {
+        alert("Error: " + e.message);
+      }
+    }
+  </script>
+</body>
+</html>
