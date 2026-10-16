@@ -17,7 +17,7 @@ from doctor_agent import doctor_reply
 from symptom_extractor import extract_structured
 from triage_engine import evaluate_triage
 from guideline_verifier import verify
-from utils import log_session
+from utils import log_session, language_name
 
 # ----------------------------------------
 # FastAPI Setup
@@ -90,6 +90,7 @@ class User(BaseModel):
 class ChatRequest(BaseModel):
     session_id: str
     message: str
+    language: str = "en"
 
 # ----------------------------------------
 # Auth Routes
@@ -139,7 +140,7 @@ async def chat(req: ChatRequest, current_user: dict = Depends(get_current_user))
     message_logs.append(user_message)
 
     try:
-        result = await run_in_threadpool(doctor_reply, SESSIONS[sid])
+        result = await run_in_threadpool(doctor_reply, SESSIONS[sid], None, language_name(req.language))
         reply, severity_flag = result if isinstance(result, tuple) else (result, False)
     except Exception as e:
         print(f"❌ Doctor agent error: {e}")
@@ -175,6 +176,10 @@ async def chat(req: ChatRequest, current_user: dict = Depends(get_current_user))
 # ----------------------------------------
 # Summaries & Diagnosis
 # ----------------------------------------
+@app.get("/api/me")
+async def get_me(current_user: dict = Depends(get_current_user)):
+    return {"email": current_user["email"]}
+
 @app.get("/api/summaries")
 async def get_user_summaries(current_user: dict = Depends(get_current_user)):
     email = current_user["email"]
@@ -198,13 +203,13 @@ async def get_single_summary(summary_id: str, current_user: dict = Depends(get_c
     return doc
 
 @app.post("/api/generate_summary")
-async def generate_summary_api(current_user: dict = Depends(get_current_user)):
+async def generate_summary_api(language: str = "en", current_user: dict = Depends(get_current_user)):
     global message_logs
     if not message_logs or len(message_logs) < 2:
         return {"summary": "No conversation found yet."}
     try:
         from summary_agent import generate_summary
-        summary_text = generate_summary(message_logs)
+        summary_text = generate_summary(message_logs, language_name(language))
         summary_doc = {
             "user_email": current_user["email"],
             "timestamp": datetime.utcnow(),
@@ -217,13 +222,13 @@ async def generate_summary_api(current_user: dict = Depends(get_current_user)):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/generate_diagnosis")
-async def generate_differential_diagnosis_api(current_user: dict = Depends(get_current_user)):
+async def generate_differential_diagnosis_api(language: str = "en", current_user: dict = Depends(get_current_user)):
     global message_logs
     if not message_logs or len(message_logs) < 2:
         return {"diagnosis": "⚠ Please have a conversation first."}
     try:
         from differential_diagnosis import generate_differential_diagnosis
-        diagnosis_text = generate_differential_diagnosis(message_logs)
+        diagnosis_text = generate_differential_diagnosis(message_logs, language_name(language))
         diagnosis_doc = {
             "user_email": current_user["email"],
             "timestamp": datetime.utcnow(),

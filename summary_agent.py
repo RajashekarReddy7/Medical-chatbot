@@ -5,7 +5,7 @@ import json
 OLLAMA_URL = "http://localhost:11434/api/generate"
 MODEL_NAME = "mistral:latest"  
 
-def generate_summary(conversation):
+def generate_summary(conversation, language="English"):
     """
     Takes a list of messages (dicts) and returns a short, structured medical summary.
     """
@@ -28,6 +28,8 @@ def generate_summary(conversation):
 
         Conversation:
         {dialogue}
+
+        Write the summary in {language}.
 
         Summary:
         """

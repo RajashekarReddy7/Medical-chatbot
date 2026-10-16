@@ -1,259 +1,58 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+.auth { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
 
-/* Reset and Base Styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+.auth-visual { background-size: cover; background-position: center; position: relative; }
+.auth-visual-overlay {
+  position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 56px; color: #fff;
+  background: linear-gradient(to top, rgba(6, 40, 38, 0.92) 5%, rgba(6, 40, 38, 0.25) 60%, transparent);
+}
+.auth-visual-overlay h2 { font-size: 2.2rem; line-height: 1.15; letter-spacing: -0.02em; }
+.auth-visual-overlay p { margin-top: 14px; max-width: 420px; opacity: 0.88; }
+
+.auth-panel { display: flex; flex-direction: column; padding: 24px 32px; background: var(--bg); }
+.auth-top { display: flex; justify-content: space-between; align-items: center; }
+.auth-card {
+  width: min(430px, 100%); margin: auto; padding: 36px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 20px; box-shadow: var(--shadow-md); animation: rise 0.5s ease both;
+}
+.auth-card h1 { margin-top: 26px; font-size: 1.65rem; letter-spacing: -0.02em; }
+.auth-sub { color: var(--text-2); margin: 6px 0 22px; }
+
+.notice { display: flex; gap: 10px; align-items: center; padding: 11px 14px; border-radius: 10px; font-size: 0.9rem; margin-bottom: 18px; }
+.notice-error { background: var(--danger-soft); color: var(--danger); }
+.notice-success { background: var(--ok-soft); color: var(--ok); }
+
+.field { display: block; margin-bottom: 16px; }
+.field > span { display: block; margin-bottom: 6px; font-size: 0.85rem; font-weight: 600; color: var(--text-2); }
+.input-wrap {
+  display: flex; align-items: center; gap: 10px; padding: 0 14px; height: 48px;
+  background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; color: var(--text-3);
+  transition: border-color 0.18s, box-shadow 0.18s;
+}
+.input-wrap:focus-within { border-color: var(--primary); box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 18%, transparent); color: var(--primary); }
+.input-wrap input { flex: 1; min-width: 0; height: 100%; border: 0; outline: 0; background: transparent; color: var(--text); }
+.input-wrap input::placeholder { color: var(--text-3); }
+.eye { background: none; border: 0; padding: 4px; color: var(--text-3); display: grid; place-items: center; }
+.eye:hover { color: var(--primary); }
+
+.submit { width: 100%; margin-top: 8px; }
+.auth-switch { margin-top: 22px; text-align: center; color: var(--text-2); font-size: 0.9rem; }
+.auth-switch button { background: none; border: 0; padding: 0; color: var(--primary); font-weight: 600; }
+.auth-switch button:hover { text-decoration: underline; }
+
+@media (max-width: 860px) {
+  .auth { grid-template-columns: 1fr; }
+  .auth-visual { display: none; }
+  .auth-card { padding: 28px 22px; }
 }
 
-html,
-body,
-#root {
-  height: 100%; /* Must be 100% to fill the viewport */
-  width: 100%;
+.demo-box {
+  width: 100%; display: flex; align-items: center; gap: 12px; padding: 12px 14px; margin-bottom: 18px; text-align: left;
+  background: var(--primary-soft); border: 1px dashed var(--primary); border-radius: 12px; color: var(--primary); transition: all 0.18s;
 }
-
-body {
-  font-family: "Poppins", sans-serif;
-  background: #f0f2f5; 
-  display: block; /* Remove flex on body to allow auth-wrapper to take full space */
-  overflow: hidden; /* Prevent body scroll bars */
-}
-
-/* =====================
-   Split Screen Layout - FULL SCREEN FIX HERE
-===================== */
-.auth-wrapper {
-  display: flex;
-  width: 100vw; /* Take full viewport width */
-  height: 100vh; /* Take full viewport height */
-  margin: 0;
-  padding: 0;
-}
-
-/* Left Section - Image */
-.auth-left {
-  flex: 1; /* Takes up 50% of the width */
-  background: #007bff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden; 
-  /* Setting width/height to 100% here guarantees it fills its half of the screen */
-  width: 50%; 
-  height: 100%; 
-}
-
-.auth-left .login-image {
-  max-width: 80%; 
-  max-height: 80%;
-  object-fit: contain; 
-  border-radius: 15px; 
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); 
-}
-
-/* Right Section - Login Card */
-.auth-right {
-  flex: 1; /* Takes up 50% of the width */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #f0f2f5; 
-  padding: 20px;
-  width: 50%;
-  height: 100%;
-}
-
-/* =====================
-   Login Card Styling
-===================== */
-.login-card {
-  width: 100%;
-  max-width: 450px; 
-  padding: 50px 40px;
-  background: white;
-  border-radius: 15px; 
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1); 
-  text-align: center;
-  transition: all 0.3s ease;
-}
-
-.login-header {
-  margin-bottom: 30px;
-}
-
-.carebot-logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 25px;
-  gap: 8px; 
-}
-
-.carebot-logo .heart-icon {
-  color: #007bff; 
-  width: 30px;
-  height: 30px;
-}
-
-.carebot-logo span {
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: #333; 
-}
-
-.login-header h2 {
-  color: #333; 
-  font-weight: 700;
-  font-size: 2rem;
-  margin-bottom: 5px;
-}
-
-.subtitle {
-  color: #666; 
-  font-size: 1rem;
-}
-
-/* =====================
-   Input Fields
-===================== */
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.input-group {
-  position: relative;
-}
-
-.input-icon {
-  position: absolute;
-  left: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #a0a0a0; 
-  width: 20px;
-  height: 20px;
-}
-
-.eye-toggle {
-  position: absolute;
-  right: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #a0a0a0;
-  cursor: pointer;
-  padding: 5px;
-  border-radius: 5px;
-  transition: color 0.2s ease;
-}
-
-.eye-toggle:hover {
-  color: #007bff;
-}
-
-input {
-  width: 100%;
-  padding: 14px 45px;
-  border: 1px solid #e0e0e0; 
-  border-radius: 8px; 
-  background: #fdfdfd; 
-  font-size: 1rem;
-  color: #333;
-  outline: none;
-  transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-input:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
-  background: white;
-}
-
-input::placeholder {
-  color: #a0a0a0;
-}
-
-/* =====================
-   Button
-===================== */
-button {
-  background: #007bff;
-  border: none;
-  padding: 14px;
-  border-radius: 8px;
-  color: white;
-  font-weight: 600;
-  font-size: 1.05rem;
-  cursor: pointer;
-  margin-top: 25px;
-  box-shadow: 0 5px 20px rgba(0, 123, 255, 0.2); 
-  transition: all 0.3s ease;
-}
-
-button:hover {
-  background: #0056b3;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 123, 255, 0.3);
-}
-
-button:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 10px rgba(0, 123, 255, 0.1);
-}
-
-/* =====================
-   Switch Text
-===================== */
-.toggle {
-  margin-top: 30px;
-  font-size: 0.95rem;
-  color: #666;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.toggle span {
-    color: #007bff;
-    font-weight: 600;
-}
-
-.toggle:hover span {
-  color: #0056b3;
-  text-decoration: underline;
-}
-
-/* =====================
-   Responsive Adjustments
-===================== */
-@media (max-width: 768px) {
-  .auth-wrapper {
-    flex-direction: column; 
-    height: auto; 
-    overflow-y: auto;
-  }
-
-  .auth-left {
-    display: none; 
-  }
-
-  .auth-right {
-    flex: none; 
-    width: 100%;
-    min-height: 100vh; 
-    padding: 20px;
-  }
-
-  .login-card {
-    border-radius: 0; 
-    box-shadow: none; 
-    padding: 30px 20px;
-    max-width: 100%; 
-  }
-
-  .login-header h2 {
-    font-size: 1.8rem;
-  }
-}
+.demo-box:hover { transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+.demo-box span { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.3; }
+.demo-box strong { font-size: 0.88rem; color: var(--text); }
+.demo-box small { font-size: 0.78rem; color: var(--text-2); overflow: hidden; text-overflow: ellipsis; }
+.demo-box em { font-style: normal; font-size: 0.78rem; font-weight: 600; }
+.auth-tools { display: flex; gap: 8px; align-items: center; }

@@ -1,141 +1,149 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Eye, EyeOff, Mail, Lock, AlertCircle, CheckCircle2, ArrowLeft, Sun, Moon, Sparkles } from "lucide-react";
+import Brand from "../components/Brand";
+import LanguageSwitcher from "../components/LanguageSwitcher";
+import useTheme from "../components/useTheme";
+import { useI18n } from "../i18n";
+import { login, register, DEMO } from "../api";
+import loginImage from "../assets/doctor1.jpg";
 import "../styles/login.css";
-// NOTE: Reverting to 'User' as 'Mail' might not be available in your lucide-react version.
-import { Eye, EyeOff, User, Lock } from "lucide-react"; 
-import loginImage from "../assets/doctor1.jpg"; // Reverting to the existing image file name
 
 export default function Login() {
   const navigate = useNavigate();
+  const { t } = useI18n();
+  const [theme, toggleTheme] = useTheme();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [notice, setNotice] = useState(null); // { type: "error" | "success", text }
 
-  const toggleForm = () => setIsLogin(!isLogin);
+  const switchMode = () => {
+    setIsLogin((v) => !v);
+    setNotice(null);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!email || !password) {
-      alert("Please fill all fields");
+    setNotice(null);
+    if (!isLogin && password.length < 6) {
+      setNotice({ type: "error", text: t("login.errPass") });
       return;
     }
+    setLoading(true);
 
     try {
       if (isLogin) {
-        const formData = new URLSearchParams();
-        formData.append("username", email);
-        formData.append("password", password);
-
-        const res = await fetch("/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: formData,
-        });
-
-        const data = await res.json();
-        if (data.access_token) {
-          localStorage.setItem("token", data.access_token);
+        const r = await login(email, password);
+        if (r.ok) {
+          localStorage.setItem("token", r.token);
           navigate("/chat");
         } else {
-          alert("Login failed");
+          setNotice({ type: "error", text: r.error });
         }
       } else {
-        const res = await fetch("/register", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
-        });
-
-        if (res.ok) {
-          alert("✅ Registered successfully. Please log in now.");
+        const r = await register(email, password);
+        if (r.ok) {
           setIsLogin(true);
+          setPassword("");
+          setNotice({ type: "success", text: t("login.created") });
         } else {
-          const err = await res.json();
-          alert("⚠ " + (err.detail || "Registration failed"));
+          setNotice({ type: "error", text: r.error });
         }
       }
-    } catch (error) {
-      alert("❌ " + error.message);
+    } catch {
+      setNotice({ type: "error", text: t("login.errNet") });
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="auth-wrapper">
-      <div className="auth-left">
-        <img src={loginImage} alt="Healthcare background" className="login-image" />
-      </div>
+    <div className="auth">
+      <aside className="auth-visual" style={{ backgroundImage: `url(${loginImage})` }}>
+        <div className="auth-visual-overlay">
+          <h2>{t("login.tag1")} <br />{t("login.tag2")}</h2>
+          <p>{t("login.tagText")}</p>
+        </div>
+      </aside>
 
-      <div className="auth-right">
-        <div className="login-card">
-          <div className="login-header">
-            {/* CareBot Logo and text */}
-            <div className="carebot-logo">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="heart-icon"
-              >
-                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
-              </svg>
-              <span>Care Companion</span>
-            </div>
-            <h2>{isLogin ? "Welcome Back" : "Create Account"}</h2>
-            <p className="subtitle">
-              {isLogin
-                ? "Login to continue your healthcare journey"
-                : "Register to start your healthcare journey"}
-            </p>
+      <main className="auth-panel">
+        <div className="auth-top">
+          <button className="btn btn-ghost" onClick={() => navigate("/home")}>
+            <ArrowLeft size={16} className="flip-rtl" /> {t("back")}
+          </button>
+          <div className="auth-tools">
+            <LanguageSwitcher />
+            <button className="icon-btn" onClick={toggleTheme} aria-label="Toggle theme">
+              {theme === "light" ? <Moon size={17} /> : <Sun size={17} />}
+            </button>
           </div>
+        </div>
+
+        <div className="auth-card">
+          <Brand />
+          <h1>{isLogin ? t("login.welcome") : t("login.create")}</h1>
+          <p className="auth-sub">{isLogin ? t("login.subIn") : t("login.subUp")}</p>
+
+          {notice && (
+            <div className={`notice notice-${notice.type}`} role="alert">
+              {notice.type === "error" ? <AlertCircle size={17} /> : <CheckCircle2 size={17} />}
+              {notice.text}
+            </div>
+          )}
+
+          {isLogin && (
+            <button
+              type="button"
+              className="demo-box"
+              onClick={() => { setEmail(DEMO.email); setPassword(DEMO.password); setNotice(null); }}
+            >
+              <Sparkles size={17} />
+              <span>
+                <strong>{t("login.demo")}</strong>
+                <small dir="ltr">{DEMO.email} · {DEMO.password}</small>
+              </span>
+              <em>{t("login.autofill")}</em>
+            </button>
+          )}
 
           <form onSubmit={handleSubmit}>
-            <div className="input-group">
-              <User className="input-icon" /> {/* Using User icon for email */}
-              <input
-                type="email"
-                placeholder="Email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
+            <label className="field">
+              <span>{t("login.email")}</span>
+              <div className="input-wrap">
+                <Mail size={17} />
+                <input type="email" dir="ltr" placeholder="you@example.com" value={email}
+                  onChange={(e) => setEmail(e.target.value)} autoComplete="email" required />
+              </div>
+            </label>
 
-            <div className="input-group">
-              <Lock className="input-icon" />
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-              <span
-                className="eye-toggle"
-                onClick={() => setShowPassword(!showPassword)}
-                aria-label={showPassword ? "Hide password" : "Show password"}
-              >
-                {showPassword ? <EyeOff /> : <Eye />}
-              </span>
-            </div>
+            <label className="field">
+              <span>{t("login.password")}</span>
+              <div className="input-wrap">
+                <Lock size={17} />
+                <input type={showPassword ? "text" : "password"} dir="ltr" placeholder={t("login.passPh")} value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete={isLogin ? "current-password" : "new-password"} required />
+                <button type="button" className="eye" onClick={() => setShowPassword((v) => !v)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}>
+                  {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
+                </button>
+              </div>
+            </label>
 
-            <button type="submit">{isLogin ? "Login" : "Register"}</button>
+            <button type="submit" className="btn btn-primary btn-lg submit" disabled={loading}>
+              {loading ? <span className="spinner" /> : isLogin ? t("signIn") : t("login.submitUp")}
+            </button>
           </form>
 
-          <p className="toggle" onClick={toggleForm}>
-            {isLogin
-              ? <>Don’t have an account? <span>Register here</span></>
-              : <>Already have an account? <span>Login here</span></>}
+          <p className="auth-switch">
+            {isLogin ? t("login.newTo") : t("login.haveAcc")}{" "}
+            <button type="button" onClick={switchMode}>{isLogin ? t("login.createLink") : t("signIn")}</button>
           </p>
         </div>
-      </div>
-  </div>
- );
+      </main>
+    </div>
+  );
 }

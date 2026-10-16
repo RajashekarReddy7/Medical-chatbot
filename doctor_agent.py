@@ -126,15 +126,16 @@ def _call_ollama(prompt, model=None, max_tokens=180):
 def _shorten_reply(text, max_sentences=4):
     if not text:
         return "I’m here to help — could you please describe your symptoms again?"
-    sentences = re.split(r'(?<=[.!?]) +', text.strip())
+    sentences = re.split(r'(?<=[.!?。।؟])\s+', text.strip())
     return " ".join(sentences[:max_sentences])
 
 
 # -----------------------------
 # Build Doctor Prompt
 # -----------------------------
-def build_prompt(message_history, triage_context=None):
-    prompt = SYSTEM_PROMPT + "\n\nThe following is a conversation between a doctor and a patient:\n\n"
+def build_prompt(message_history, triage_context=None, language="English"):
+    prompt = SYSTEM_PROMPT + f"\nAlways reply in {language}, whatever language the patient writes in.\n"
+    prompt += "\nThe following is a conversation between a doctor and a patient:\n\n"
 
     for m in message_history:
         role = m.get("role", "user").capitalize()
@@ -151,13 +152,13 @@ def build_prompt(message_history, triage_context=None):
 # -----------------------------
 # Main Function: Doctor Reply
 # -----------------------------
-def doctor_reply(message_history, triage_context=None):
+def doctor_reply(message_history, triage_context=None, language="English"):
     """
     Generate a doctor reply using Ollama with safety and fallbacks.
     Returns (reply, end_convo_flag)
     """
     try:
-        prompt = build_prompt(message_history, triage_context)
+        prompt = build_prompt(message_history, triage_context, language)
         raw_reply = _call_ollama(prompt)
         reply = _shorten_reply(raw_reply)
 

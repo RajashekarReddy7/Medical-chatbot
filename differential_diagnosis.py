@@ -1,7 +1,7 @@
 import requests
 import json
 
-def generate_differential_diagnosis(conversation):
+def generate_differential_diagnosis(conversation, language="English"):
     """
     Takes a list of conversation messages (role + message)
     and returns the top 5 possible diagnoses using Ollama.
@@ -22,7 +22,7 @@ Conversation:
 
 Instructions:
 - Output only a numbered list (1–5)
-- Each line: "Disease — 1-line reasoning"
+- Each line: "Disease name in English — 1-line reasoning written in {language}"
 - Keep it concise and professional.
 - Do NOT include disclaimers.
 """
