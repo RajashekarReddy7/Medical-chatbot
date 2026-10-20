@@ -1,0 +1,93 @@
+{
+  "_comment": "Provenance for every guideline PDF. Dates are copied from the documents themselves (cover page 'Published:'). 'accessed_date' is filled in by scripts/download_guidelines.py. Add an entry here for every PDF you place in pdfs/.",
+  "documents": [
+    {
+      "file": "nice_ng120_acute_cough.pdf",
+      "title": "Cough (acute): antimicrobial prescribing (NICE guideline NG120)",
+      "publisher": "National Institute for Health and Care Excellence (NICE), UK",
+      "source_url": "https://www.nice.org.uk/guidance/ng120/resources/cough-acute-antimicrobial-prescribing-pdf-66141652166341",
+      "landing_page": "https://www.nice.org.uk/guidance/ng120",
+      "publication_date": "2019-02-07",
+      "version": "PDF footer: (c) NICE 2025",
+      "population": {
+        "min_age_years": 0,
+        "max_age_years": null,
+        "description": "Adults, young people and children with acute cough (upper respiratory tract infection or acute bronchitis). Individual recommendations carry their own age limits in the text."
+      },
+      "topics": [
+        "acute cough",
+        "upper respiratory tract infection",
+        "acute bronchitis",
+        "antibiotic prescribing"
+      ],
+      "accessed_date": "2026-10-20"
+    },
+    {
+      "file": "nice_ng84_sore_throat.pdf",
+      "title": "Sore throat (acute): antimicrobial prescribing (NICE guideline NG84)",
+      "publisher": "National Institute for Health and Care Excellence (NICE), UK",
+      "source_url": "https://www.nice.org.uk/guidance/ng84/resources/sore-throat-acute-antimicrobial-prescribing-pdf-1837694694085",
+      "landing_page": "https://www.nice.org.uk/guidance/ng84",
+      "publication_date": "2018-01-26",
+      "version": "PDF footer: (c) NICE 2026",
+      "population": {
+        "min_age_years": 0,
+        "max_age_years": null,
+        "description": "Adults, young people and children with acute sore throat. Individual recommendations carry their own age limits in the text."
+      },
+      "topics": [
+        "acute sore throat",
+        "pharyngitis",
+        "tonsillitis",
+        "antibiotic prescribing",
+        "FeverPAIN",
+        "Centor"
+      ],
+      "accessed_date": "2026-10-20"
+    },
+    {
+      "file": "nice_ng109_uti_lower.pdf",
+      "title": "Urinary tract infection (lower): antimicrobial prescribing (NICE guideline NG109)",
+      "publisher": "National Institute for Health and Care Excellence (NICE), UK",
+      "source_url": "https://www.nice.org.uk/guidance/ng109/resources/urinary-tract-infection-lower-antimicrobial-prescribing-pdf-66141546350533",
+      "landing_page": "https://www.nice.org.uk/guidance/ng109",
+      "publication_date": "2018-10-31",
+      "version": "PDF footer: (c) NICE 2025",
+      "population": {
+        "min_age_years": 0,
+        "max_age_years": null,
+        "description": "Children, young people and adults with lower urinary tract infection who do not have a catheter. Individual recommendations carry their own age limits in the text."
+      },
+      "topics": [
+        "lower urinary tract infection",
+        "cystitis",
+        "antibiotic prescribing",
+        "pregnancy",
+        "nitrofurantoin"
+      ],
+      "accessed_date": "2026-10-20"
+    },
+    {
+      "file": "who_imai_acute_care.pdf",
+      "title": "Acute Care: Integrated Management of Adolescent and Adult Illness (IMAAI), interim guidelines for first-level facility health workers",
+      "publisher": "World Health Organization (WHO)",
+      "source_url": "https://applications.emro.who.int/aiecf/web38.pdf",
+      "landing_page": "https://www.who.int/publications/i/item/10665-68535",
+      "publication_date": "2004-01",
+      "version": "WHO/CDS/IMAI/2004.1 (interim guidelines)",
+      "index": false,
+      "index_note": "Excluded by default: published in 2004 and described as interim guidance. It is very likely superseded in parts, so it is NOT indexed or cited as current guidance. Set \"index\": true only if a clinician decides it is appropriate for your use.",
+      "population": {
+        "min_age_years": 10,
+        "max_age_years": null,
+        "description": "Adolescents and adults, in first-level facilities in resource-limited settings."
+      },
+      "topics": [
+        "acute care",
+        "syndromic management",
+        "adolescents and adults"
+      ],
+      "accessed_date": "2026-10-20"
+    }
+  ]
+}

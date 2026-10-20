@@ -1,4 +1,14 @@
 # triage_engine.py
+
+# Shared with rag/safety.py so the guideline verifier reuses (never re-invents) these red flags.
+RED_FLAG_KEYWORDS = [
+    "chest pain", "shortness of breath", "difficulty breathing",
+    "severe bleeding", "unconscious", "loss of consciousness",
+    "sudden weakness", "slurred speech", "seizure",
+    "altered mental state", "vomiting blood", "severe abdominal pain"
+]
+
+
 def evaluate_triage(struct):
     """
     Enhanced triage evaluation function.
@@ -13,12 +23,7 @@ def evaluate_triage(struct):
     # -------------------------
     # 🩺 Red flag keywords
     # -------------------------
-    red_flags = [
-        "chest pain", "shortness of breath", "difficulty breathing",
-        "severe bleeding", "unconscious", "loss of consciousness",
-        "sudden weakness", "slurred speech", "seizure",
-        "altered mental state", "vomiting blood", "severe abdominal pain"
-    ]
+    red_flags = RED_FLAG_KEYWORDS
 
     # If any red flag symptom is in chief complaint or associated symptoms
     triggered_flags = [rf for rf in red_flags if rf in cc or any(rf in s for s in assoc)]

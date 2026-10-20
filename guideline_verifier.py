@@ -67,3 +67,18 @@ def verify(triage_result, top_diagnoses=[]):
 # Answer in JSON: {{ "compliance": "Yes/No/Partial", "reason": "short explanation"}}
 # """
 #     return call_ollama(prompt)
+
+
+# ---------------------------------------------------------------------------
+# RAG-based verification (see rag/README.md). The original verify() above is unchanged.
+# ---------------------------------------------------------------------------
+def verify_recommendations(patient_context: dict, recommendations: list, triage: dict | None = None) -> dict:
+    """Verify doctor-agent recommendations against the indexed guideline PDFs.
+
+    Returns the structured VerificationResult as a plain dict. Kept separate from verify(), which only
+    upgrades a triage level from data/guidelines.json.
+    """
+    from rag.models import PatientContext
+    from rag.verifier import get_verifier
+
+    return get_verifier().verify(PatientContext(**patient_context), list(recommendations), triage).model_dump()

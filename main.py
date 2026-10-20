@@ -18,6 +18,7 @@ from symptom_extractor import extract_structured
 from triage_engine import evaluate_triage
 from guideline_verifier import verify
 from utils import log_session, language_name
+from rag.models import VerifyRequest
 
 # ----------------------------------------
 # FastAPI Setup
@@ -91,6 +92,7 @@ class ChatRequest(BaseModel):
     session_id: str
     message: str
     language: str = "en"
+    verify_guidelines: bool = False  # opt-in: check the doctor's advice against the indexed guidelines (slower)
 
 # ----------------------------------------
 # Auth Routes
@@ -171,7 +173,28 @@ async def chat(req: ChatRequest, current_user: dict = Depends(get_current_user))
     }
 
     log_session(sid, {"session": SESSIONS[sid], "structured": structured, "triage": triage_info, "ts": time.time()})
-    return {"reply": reply, "triage": triage_info, "structured": structured}
+    response = {"reply": reply, "triage": triage_info, "structured": structured}
+    if req.verify_guidelines:
+        # Never lets a verification problem break the chat: failures are reported inside the payload.
+        response["verification"] = await run_in_threadpool(_verify_reply, reply, structured, triage_info)
+    return response
+
+def _verify_reply(reply: str, structured: dict, triage_info: dict) -> dict:
+    """Run guideline verification on the doctor's advice sentences (patient age etc. are unknown here)."""
+    try:
+        from rag.models import PatientContext
+        from rag.text_utils import split_recommendations
+        from rag.verifier import get_verifier
+        recs = split_recommendations(reply)
+        if not recs:
+            return {"skipped": "The reply contained no verifiable recommendations."}
+        symptoms = [s for s in [structured.get("chief_complaint", "")[:80], *(structured.get("associated_symptoms") or [])] if s]
+        patient = PatientContext(symptoms=symptoms, duration=structured.get("onset") or None, assessment=reply,
+                                 vitals={k: str(v) for k, v in (structured.get("vitals") or {}).items()})
+        return get_verifier().verify(patient, recs, {"level": triage_info.get("level"), "reason": triage_info.get("reason")}).model_dump()
+    except Exception as e:  # keep the chat alive; do not leak internals
+        print(f"⚠️ Guideline verification failed: {type(e).__name__}")
+        return {"error": "Guideline verification is unavailable right now."}
 
 # ----------------------------------------
 # Summaries & Diagnosis
@@ -241,3 +264,29 @@ async def generate_differential_diagnosis_api(language: str = "en", current_user
         raise HTTPException(status_code=500, detail=str(e))
 
 # ----------------------------------------
+
+# ----------------------------------------
+# RAG guideline verification
+# ----------------------------------------
+@app.post("/api/verify-guideline")
+@app.post("/verify-guideline")
+async def verify_guideline(req: VerifyRequest, current_user: dict = Depends(get_current_user)):
+    """Check proposed recommendations against the indexed guideline PDFs.
+
+    Returns per-recommendation status, real citations, missing information and safety escalation.
+    This is an educational prototype, not clinical decision support.
+    """
+    from rag.verifier import get_verifier
+    try:
+        result = await run_in_threadpool(
+            get_verifier().verify, req.patient_context, req.recommendations, req.triage)
+    except Exception as e:
+        print(f"❌ Guideline verification error: {type(e).__name__}")  # no patient data in logs
+        raise HTTPException(status_code=500, detail="Guideline verification failed. Please try again.")
+    return result
+
+@app.get("/api/guidelines/status")
+async def guidelines_status(current_user: dict = Depends(get_current_user)):
+    """Which guideline documents are indexed (for troubleshooting)."""
+    from rag.verifier import get_verifier
+    return await run_in_threadpool(get_verifier().retriever.status)

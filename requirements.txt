@@ -11,3 +11,11 @@ passlib[bcrypt]
 bcrypt
 python-multipart
 bson
+
+# --- RAG guideline verification (Python 3.9-3.12 recommended; see rag/README.md) ---
+pymupdf
+numpy
+pytest
+httpx
+sentence-transformers
+chromadb

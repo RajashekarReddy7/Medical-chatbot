@@ -117,3 +117,12 @@ npm install
 
 # Start frontend
 npm run dev
+
+---
+
+## 🔎 Guideline verification (RAG)
+
+Doctor-agent advice can be checked against official guideline PDFs (NICE/WHO) with source citations, explicit
+"insufficient evidence" handling and rule-based emergency escalation. See [`rag/README.md`](rag/README.md) for
+setup (needs Python 3.10–3.12), ingestion, API examples, tests, evaluation and known limitations.
+This is an educational prototype, not clinically validated.
