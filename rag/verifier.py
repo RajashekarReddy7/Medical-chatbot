@@ -204,7 +204,10 @@ class GuidelineVerifier:
             out.safety_concerns.append("Retrieved sources disagree with each other; clinician review needed.")
 
         out.status = status
-        out.evidence = [e for _, _, e in supports] + [e for _, _, e in contras]
+        unique: dict[tuple, Evidence] = {}   # overlapping chunks can cite the same sentence twice
+        for e in [e for _, _, e in supports] + [e for _, _, e in contras]:
+            unique.setdefault((e.document_title, e.page_number, e.role, _norm(e.quoted_text)), e)
+        out.evidence = list(unique.values())
         if status == "supported" and any(e.source_stale for e in out.evidence):
             out.safety_concerns.append("Supporting source is older than the configured age limit or undated; check for newer guidance.")
 
